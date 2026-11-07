@@ -14,7 +14,7 @@ Full requirements: `.claude/docs/SRS.md` (text) / `.claude/docs/SRS.pdf` (origin
 - **Events:** Observer pattern via `SimulationListener`, immutable event records, delivered at end of step; one failing listener must not stop the simulation.
 - **Quality bar:** >= 80% line coverage on the model, every model class unit tested, Javadoc on every public class and method.
 - **Input validation:** reject invalid input (negative mass, throttle > 100%) with clear errors.
-- **Workflow:** branch per task, protected `main`, PRs with one review, CI on macOS and Windows.
+- **Workflow:** branch per task, protected `main`, PRs need 2 code owner approvals (see `.github/CODEOWNERS`), CI on macOS and Windows. The SRS says one review; the team raised it to 2.
 
 ## Out of scope
 
