@@ -1,3 +1,5 @@
+package dronesimulation;
+
 /**
  * Entry point for the 3D Drone Flight Simulator.
  */
