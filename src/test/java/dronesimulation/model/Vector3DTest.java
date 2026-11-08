@@ -30,6 +30,11 @@ public class Vector3DTest {
   }
 
   @Test
+  public void upIsUnitZ() {
+    assertVector(0, 0, 1, Vector3D.UP);
+  }
+
+  @Test
   public void rejectsNaNAndInfinity() {
     assertThrows(IllegalArgumentException.class, () -> new Vector3D(Double.NaN, 0, 0));
     assertThrows(IllegalArgumentException.class, () -> new Vector3D(0, Double.POSITIVE_INFINITY, 0));
