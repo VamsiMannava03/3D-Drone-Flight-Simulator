@@ -31,6 +31,7 @@ Sophakotra Son @Ulton321
 │   │   ├── model/
 │   │   │   ├── Vector3D.java
 │   │   │   └── obstacles/
+│   │   │   └── physics/
 │   │   ├── controller/
 │   │   └── view/
 │   └── test/java/dronesimulation/
@@ -38,6 +39,7 @@ Sophakotra Son @Ulton321
 │       └── model/
 │           ├── Vector3DTest.java
 │           └── obstacles/
+│           └── physics/
 └── README.md
 ```
 
@@ -52,6 +54,7 @@ Sophakotra Son @Ulton321
 | `src/main/java/dronesimulation/model/` | Model: simulation state and logic with no UI code (physics, drones, world, weather) |
 | `src/main/java/dronesimulation/model/Vector3D.java` | Immutable 3D vector used for positions, velocities and forces |
 | `src/main/java/dronesimulation/model/obstacles/` | Obstacles (boxes and spheres) and collision checks between drones and obstacles |
+| `src/main/java/dronesimulation/model/physics/` | Physics engine: `PhysicsEngine` interface, `OwnPhysicsEngine` (semi-implicit Euler), `PhysicsBody`/`PointMass`, forces (`Gravity`, `QuadraticDrag`), `WindField` with the `NoWind` null object |
 | `src/main/java/dronesimulation/controller/` | Controller: turns user input into commands on the model |
 | `src/main/java/dronesimulation/view/` | Views: draw read-only snapshots of the model and never modify it |
 | `src/test/java/dronesimulation/` | JUnit 5 tests, mirroring the `src/main/java/dronesimulation/` package layout |
@@ -94,8 +97,8 @@ java -cp target/classes dronesimulation.Main
 |--------|--------------------------|---------|
 | Vamsi Mannava (@VamsiMannava03) | Repo setup (starter project, SRS, PR template, CODEOWNERS); Maven project layout; `Vector3D` class and unit tests (in progress) | 9 |
 | Muhammed Bilal (@Attested-paper51) | Obstacles for collision detection (FR13): `Obstacle`, `BoxObstacle`, `SphereObstacle`, `ObstacleField` in `model/obstacles/`, with 30 unit tests; reviewed PR #3 | 2 |
-| Taha Oguzhan Ucar (@ozi14) | | |
 | Sophakotra Son (@Ulton321) | Built an early prototype demo outside this repo to show the team the target look and features of the simulator | 0 |
+| Taha Oguzhan Ucar (@ozi14) | Physics v1 (`model/physics/`): `PhysicsEngine` interface and `OwnPhysicsEngine` with semi-implicit Euler integration; `PhysicsBody` and `PointMass`; `Force` strategy with `Gravity` and `QuadraticDrag` (drag uses airspeed relative to the wind); `WindField` with the `NoWind` null object; `PhysicsConstants`; `Vector3D.UP`. Unit tests for every physics class, plus accuracy tests for free fall, hover drift and terminal velocity, and a determinism test | 1 |
 
 
 

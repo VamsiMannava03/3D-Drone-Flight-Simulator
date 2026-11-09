@@ -18,6 +18,13 @@ public record Vector3D(double x, double y, double z) {
   public static final Vector3D ZERO = new Vector3D(0, 0, 0);
 
   /**
+   * The unit vector pointing up, {@code (0, 0, 1)}.
+   *
+   * <p>The simulation uses x east, y north and z up, with the ground at {@code z = 0}.
+   */
+  public static final Vector3D UP = new Vector3D(0, 0, 1);
+
+  /**
    * Creates a vector from its components.
    *
    * @throws IllegalArgumentException if any component is {@code NaN} or infinite
