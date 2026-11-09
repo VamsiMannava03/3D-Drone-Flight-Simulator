@@ -1,0 +1,6 @@
+dronesimulation/model/obstacles/SphereObstacle.class
+dronesimulation/model/Vector3D.class
+dronesimulation/model/obstacles/BoxObstacle.class
+dronesimulation/model/obstacles/ObstacleField.class
+dronesimulation/Main.class
+dronesimulation/model/obstacles/Obstacle.class

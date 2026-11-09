@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BoxObstacle.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">3D-Drone-Simulation</a> &gt; <a href="index.source.html" class="el_package">dronesimulation.model.obstacles</a> &gt; <span class="el_source">BoxObstacle.java</span></div><h1>BoxObstacle.java</h1><pre class="source lang-java linenums">package dronesimulation.model.obstacles;
+
+import dronesimulation.model.Vector3D;
+
+/**
+ * A box shaped obstacle with its edges along the world axes, such as a building or a wall
+ */
+public final class BoxObstacle extends Obstacle {
+
+  private final Vector3D min;
+  private final Vector3D max;
+
+  /**
+   * Creates a box from two opposite corners
+   *
+   * @param id the name of the obstacle
+   * @param min the corner with the smallest x, y and z values
+   * @param max the corner with the largest x, y and z values
+   * @throws IllegalArgumentException if a corner is null or min is not smaller than max on every
+   *     axis
+   */
+  public BoxObstacle(String id, Vector3D min, Vector3D max) {
+<span class="fc" id="L23">    super(id);</span>
+<span class="fc bfc" id="L24" title="All 4 branches covered.">    if (min == null || max == null) {</span>
+<span class="fc" id="L25">      throw new IllegalArgumentException(&quot;Corners must not be null&quot;);</span>
+    }
+<span class="pc bpc" id="L27" title="1 of 6 branches missed.">    if (min.x() &gt;= max.x() || min.y() &gt;= max.y() || min.z() &gt;= max.z()) {</span>
+<span class="fc" id="L28">      throw new IllegalArgumentException(</span>
+          &quot;Min corner &quot; + min + &quot; must be smaller than max corner &quot; + max + &quot; on every axis&quot;);
+    }
+<span class="fc" id="L31">    this.min = min;</span>
+<span class="fc" id="L32">    this.max = max;</span>
+<span class="fc" id="L33">  }</span>
+
+  /**
+   * Returns the corner with the smallest x, y and z values
+   *
+   * @return the min corner
+   */
+  public Vector3D getMin() {
+<span class="fc" id="L41">    return min;</span>
+  }
+
+  /**
+   * Returns the corner with the largest x, y and z values
+   *
+   * @return the max corner
+   */
+  public Vector3D getMax() {
+<span class="fc" id="L50">    return max;</span>
+  }
+
+  @Override
+  public double distanceTo(Vector3D point) {
+    // Closest point on the box is the given point clamped to the box edges
+<span class="fc" id="L56">    Vector3D closest = new Vector3D(</span>
+<span class="fc" id="L57">        clamp(point.x(), min.x(), max.x()),</span>
+<span class="fc" id="L58">        clamp(point.y(), min.y(), max.y()),</span>
+<span class="fc" id="L59">        clamp(point.z(), min.z(), max.z()));</span>
+<span class="fc" id="L60">    return point.subtract(closest).magnitude();</span>
+  }
+
+  private static double clamp(double value, double low, double high) {
+<span class="fc" id="L64">    return Math.max(low, Math.min(value, high));</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
