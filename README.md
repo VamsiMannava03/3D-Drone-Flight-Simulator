@@ -16,6 +16,8 @@ Vamsi Mannava @VamsiMannava03
 ├── .github/
 │   ├── CODEOWNERS
 │   └── pull_request_template.md
+├── .mvn/wrapper/
+├── mvnw, mvnw.cmd
 ├── pom.xml
 ├── src/
 │   ├── main/java/dronesimulation/
@@ -39,6 +41,7 @@ Vamsi Mannava @VamsiMannava03
 | `.claude/docs/` | Software Requirements Specification (original PDF and text copy) |
 | `.github/CODEOWNERS` | Code owners requested as reviewers on every PR |
 | `.github/pull_request_template.md` | Default description for new pull requests |
+| `mvnw`, `mvnw.cmd`, `.mvn/wrapper/` | Maven Wrapper: runs Maven 3.9.11 without installing it |
 | `pom.xml` | Maven build: JDK 25, JUnit 5, JaCoCo |
 | `src/main/java/dronesimulation/Main.java` | Application entry point |
 | `src/main/java/dronesimulation/model/` | Model: simulation state and logic with no UI code (physics, drones, world, weather) |
@@ -50,13 +53,69 @@ Vamsi Mannava @VamsiMannava03
 
 ## Setup and Run
 
-Requires JDK 25 and Maven 3.9 or newer.
+Requires **JDK 25**. Maven does not need to be installed: the Maven Wrapper (`mvnw` / `mvnw.cmd`) downloads Maven 3.9.11 on first run.
+
+### 1. Install JDK 25
+
+| OS | Command |
+|----|---------|
+| Windows | `winget install EclipseAdoptium.Temurin.25.JDK` |
+| macOS | `brew install --cask temurin@25` |
+
+### 2. Point `JAVA_HOME` at JDK 25
+
+`pom.xml` compiles with `release 25`, so an older JDK (e.g. 19 or 21) fails with `release version 25 not supported`.
+
+Windows (PowerShell). Change the path if your install folder is different:
+
+```powershell
+[Environment]::SetEnvironmentVariable('JAVA_HOME', 'C:\Program Files\Eclipse Adoptium\jdk-25.0.5.8-hotspot', 'User')
+```
+
+macOS (add to `~/.zshrc`):
 
 ```bash
-mvn test       # compile and run all JUnit tests
-mvn compile
+export JAVA_HOME=$(/usr/libexec/java_home -v 25)
+```
+
+**Restart your terminal and IDE** after changing environment variables, then check:
+
+```bash
+java -version   # should print 25
+```
+
+If it still prints an older version on Windows, remove the old JDK from your `Path` or move it below JDK 25 (System Properties → Environment Variables).
+
+### 3. Build, test and run
+
+macOS / Linux:
+
+```bash
+./mvnw test        # compile and run all JUnit tests (coverage report: target/site/jacoco/index.html)
+./mvnw compile
 java -cp target/classes dronesimulation.Main
 ```
+
+Windows:
+
+```powershell
+.\mvnw.cmd test
+.\mvnw.cmd compile
+java -cp target/classes dronesimulation.Main
+```
+
+### IDE setup
+
+- **IntelliJ IDEA:** open the folder as a Maven project, then File → Project Structure → SDK → JDK 25.
+- **VS Code:** install *Extension Pack for Java*, then add to your user `settings.json`:
+
+  ```json
+  "java.configuration.runtimes": [
+    { "name": "JavaSE-25", "path": "C:\\Program Files\\Eclipse Adoptium\\jdk-25.0.5.8-hotspot", "default": true }
+  ]
+  ```
+
+  Run `Main` with the **Run** link above `main`, and tests from the **Testing** panel.
 
 ## Progress so Far
 
