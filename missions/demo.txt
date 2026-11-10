@@ -1,0 +1,48 @@
+# Demo missions, one command per line, in the console command language.
+# Type `help` while the simulator runs to see every command.
+
+# q1: deliver a package to the front door of Elm St 3. It flies in above the
+# rooftops, drops down over the street, then flies home and lands.
+q1 takeoff 12
+q1 goto 20 -10 18
+q1 goto 28 -28 18
+q1 deliver 28 -25 0
+q1 home
+q1 land
+
+# q2: survey the city. It clips the hospital no-fly zone on the way, and
+# its long route drains the battery, so it reports low battery, climbs
+# above the rooftops and returns home on its own before finishing.
+q2 takeoff 8
+q2 goto 15 25 20
+q2 goto 45 25 40
+q2 hover 3
+q2 goto 75 15 30
+q2 goto 75 -25 25
+q2 goto 45 -40 20
+q2 goto -25 -40 15
+q2 goto -10 10 20
+q2 goto 40 50 30
+q2 goto 80 50 30
+q2 goto 80 -50 30
+q2 home
+q2 land
+
+# h1: the cargo hexacopter lifts a 1.5 kg crate onto the roof of Tower A,
+# climbing above it south of the tower first, then flies home and lands.
+h1 takeoff 10
+h1 goto 30 -8 32
+h1 deliver 30 10 28
+h1 home
+h1 land
+
+# fw1: take off west down the runway, fly a wide circuit around the city,
+# then come back and land in the open field to the west.
+fw1 takeoff 40
+fw1 goto -150 60 45
+fw1 goto 100 130 50
+fw1 goto 160 -90 50
+fw1 goto -100 -110 40
+fw1 goto -140 -60 20
+fw1 goto -220 -60 12
+fw1 land

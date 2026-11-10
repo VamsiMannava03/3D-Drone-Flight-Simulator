@@ -1,0 +1,26 @@
+# The SRS primary use case, step by step.
+# Run it with:  java -jar target/hover.jar --scenario=empty --mission=missions/usecase.txt
+#
+# 1. Start from an empty world with a ground plane (--scenario=empty).
+# 2. Add a quadcopter at the origin with a 0.5 kg payload. It starts at 35% charge, so the
+#    wind can push it below 20% during the mission (step 8).
+add quad u1 0 0 0.5 35
+
+# 3. Wind: 5 m/s from the west, with light gusts.
+wind 5 west 1.5
+
+# 4. The mission: take off to 15 m, fly to two waypoints, drop the payload at the second,
+#    hover for 10 s, return, and land. Every step is checked against the drone first.
+u1 takeoff 15
+u1 goto 40 0 15
+u1 goto 40 40 15
+u1 drop
+u1 hover 10
+u1 home
+u1 land
+
+# 5-9. The flight runs on the physics engine. Watch the status panel: the mass falls from
+#    2.0 kg to 1.5 kg after the drop and the throttle with it (step 7). Fighting the wind
+#    drains the battery; below 20% the drone reports LOW_BATTERY, abandons the mission
+#    (RETURN_HOME) and lands safely (step 8). Press R (or type reset) to rerun it
+#    identically (step 9).

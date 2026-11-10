@@ -1,0 +1,47 @@
+# Rooftop inspection mission.
+# Run it with:  java -jar target/hover.jar --mission=missions/inspection.txt
+#
+# Buildings (for planning routes):
+#   Tower A    x 25..35   y 5..15     height 28
+#   Tower D    x 56..64   y 31..39    height 36
+#   Elm Street houses: centres x = 15, 28, 41, 54, 67; north side
+#     (odd numbers) y -22..-14, south side (even) y -42..-34; ridges
+#     6.5 or 8.5 m. The street between them is clear from y -34 to -22.
+#   Oak Court houses: x -44..-36 (odd) and -16..-8 (even), y 16..26
+#     and 29..39; ridges up to 8.5 m. The lane between them is clear.
+#   Hospital no-fly zone: centre (-30, -30), radius 12
+
+# q1: climb high, deliver a package onto the roof of Tower A,
+# check the top of Tower D, then fly home, land and recharge.
+q1 takeoff 15
+q1 goto 0 10 32
+q1 deliver 30 10 28
+q1 goto 60 35 42
+q1 hover 4
+q1 home
+q1 land
+q1 charge
+
+# q2: inspect three house roofs in turn, hovering over each one:
+# Oak Ct 3, then Elm St 7 and Elm St 4 across the street.
+q2 takeoff 10
+q2 goto -40 34 14
+q2 hover 3
+q2 goto 10 -5 14
+q2 goto 54 -18 14
+q2 hover 3
+q2 goto 28 -38 14
+q2 hover 3
+q2 home
+q2 land
+
+# fw1: take off west, fly a figure eight high over the city
+# (above the 36 m Tower D), then land in the western field.
+fw1 takeoff 40
+fw1 goto -150 80 50
+fw1 goto 150 -80 55
+fw1 goto 150 80 55
+fw1 goto -150 -80 50
+fw1 goto -200 -60 20
+fw1 goto -280 -60 12
+fw1 land
