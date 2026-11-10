@@ -91,18 +91,36 @@ If it still prints an older version on Windows, remove the old JDK from your `Pa
 macOS / Linux:
 
 ```bash
-./mvnw test        # compile and run all JUnit tests (coverage report: target/site/jacoco/index.html)
-./mvnw compile
-java -cp target/classes dronesimulation.Main
+./mvnw test            # compile and run all JUnit tests (coverage report: target/site/jacoco/index.html)
+./mvnw javafx:run      # open the Hover window (3D view, top/side views, panels)
+./mvnw javafx:run -Djavafx.args="--scenario=empty --mission=missions/usecase.txt"
+./mvnw compile && java -cp target/classes dronesimulation.Main text   # console mode only
 ```
 
 Windows:
 
 ```powershell
 .\mvnw.cmd test
-.\mvnw.cmd compile
-java -cp target/classes dronesimulation.Main
+.\mvnw.cmd javafx:run
+.\mvnw.cmd javafx:run "-Djavafx.args=--scenario=empty --mission=missions/usecase.txt"
+.\mvnw.cmd compile; java -cp target/classes dronesimulation.Main text
 ```
+
+Options (put them in `-Djavafx.args="..."` for the window, or after `Main` for the console):
+
+| Option | Default | Meaning |
+|---|---|---|
+| `gui` / `text` | `gui` (`text` without a display) | The JavaFX window, or the terminal only |
+| `--scenario=city\|empty` | `city` | `empty` is a bare ground plane, the start of the SRS use case |
+| `--mission=FILE` | `missions/demo.txt` for the city | Commands to run at start, and again after every reset |
+| `--seed=N` | `42` | Seed for gusts and sensor noise; the same seed gives the same run |
+| `--paused` | off | Start paused; press Start or type `start` |
+| `--screenshot=FILE.png` | off | Save `FILE-3d.png`, `FILE-2d.png` and `FILE-follow.png` of the window, then close |
+| `--screenshot-at=S` | `8` | Simulated seconds to wait before the screenshots |
+
+In the window, the terminal still takes commands (type `help`). In the 3D view, drag to turn the
+camera, right-drag to move it and scroll to zoom; *Follow selected drone* keeps the drone picked in
+the status panel in the middle.
 
 ### IDE setup
 
