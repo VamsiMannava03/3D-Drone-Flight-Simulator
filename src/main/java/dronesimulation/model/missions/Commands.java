@@ -1,7 +1,9 @@
 package dronesimulation.model.missions;
 
+import dronesimulation.model.Vector3D;
 import dronesimulation.model.drones.Drone;
 import dronesimulation.model.states.Flying;
+import java.util.Locale;
 
 /** Helpers shared by the commands. */
 final class Commands {
@@ -32,5 +34,16 @@ final class Commands {
    */
   static String format(double value) {
     return value == Math.rint(value) ? String.valueOf((long) value) : String.valueOf(value);
+  }
+
+  /**
+   * Formats a point for event messages, rounded to centimetres.
+   *
+   * @param p the point
+   * @return for example "(30.00, 10.00, 28.00)"
+   */
+  static String point(Vector3D p) {
+    return String.format(Locale.ROOT, "(%.2f, %.2f, %.2f)", p.x() + 0.0, p.y() + 0.0,
+        p.z() + 0.0);
   }
 }

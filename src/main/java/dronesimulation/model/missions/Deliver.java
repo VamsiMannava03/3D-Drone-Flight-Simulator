@@ -47,7 +47,8 @@ public class Deliver implements DroneCommand {
       double mass = drone.dropPayload();
       dropped = true;
       drone.getEvents().publish(SimEventType.PAYLOAD_DROPPED, drone.getId(),
-          String.format(Locale.ROOT, "dropped %.2f kg at %s", mass, dropPoint));
+          String.format(Locale.ROOT, "dropped %.2f kg at %s", mass,
+          Commands.point(dropPoint)));
     }
   }
 

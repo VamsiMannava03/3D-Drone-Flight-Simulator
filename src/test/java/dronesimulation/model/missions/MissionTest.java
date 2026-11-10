@@ -56,6 +56,19 @@ class MissionTest {
   }
 
   @Test
+  void dropMessageGivesThePointInMetres() {
+    drone.loadPayload(0.5);
+    mission.addAll(List.of(new TakeOff(5), new DropPayload()));
+
+    run(20);
+
+    String message = events.stream().filter(e -> e.type() == SimEventType.PAYLOAD_DROPPED)
+        .map(SimEvent::message).findFirst().orElseThrow();
+    assertTrue(message.matches("dropped 0\\.50 kg at \\(-?\\d+\\.\\d\\d, -?\\d+\\.\\d\\d, "
+        + "\\d+\\.\\d\\d\\)"), message);
+  }
+
+  @Test
   void fullDeliveryMissionRunsInOrder() {
     drone.loadPayload(0.5);
     mission.addAll(List.of(new TakeOff(5), new GoTo(new Vector3D(10, 0, 5)), new Hover(1),
@@ -70,6 +83,8 @@ class MissionTest {
     assertEquals(7, steps.size());
     assertEquals("'takeoff 5' done, 6 steps left", steps.get(0));
     assertEquals("'charge' done, 0 steps left", steps.get(6));
+    assertEquals(List.of("dropped 0.50 kg at (10.00, 6.00, 0.00)"), events.stream()
+        .filter(e -> e.type() == SimEventType.PAYLOAD_DROPPED).map(SimEvent::message).toList());
     // The deliver step is reported right after the drop that finished it.
     assertEquals(SimEventType.MISSION_STEP_DONE,
         types().get(types().indexOf(SimEventType.PAYLOAD_DROPPED) + 1));
