@@ -26,8 +26,9 @@ public class MainTest {
   @Test
   public void defaultsToTheCityWithTheDemoMission() {
     Main.Options options = Main.Options.parse(new String[0]);
-    assertEquals("text", options.mode());
+    assertEquals(java.awt.GraphicsEnvironment.isHeadless() ? "text" : "gui", options.mode());
     assertEquals("city", options.scenario());
+    assertNull(options.screenshot());
     assertEquals(42, options.seed());
     assertFalse(options.paused());
     assertEquals(Path.of("missions", "demo.txt"), options.mission());
@@ -36,12 +37,16 @@ public class MainTest {
   @Test
   public void parsesEveryOption() {
     Main.Options options = Main.Options.parse(new String[] {"TEXT", "--scenario=Empty",
-        "--seed=7", "--paused", "--mission=missions/usecase.txt"});
+        "--seed=7", "--paused", "--mission=missions/usecase.txt", "--screenshot=shot.png",
+        "--screenshot-at=3.5"});
     assertEquals("text", options.mode());
     assertEquals("empty", options.scenario());
     assertEquals(7, options.seed());
     assertTrue(options.paused());
     assertEquals(Path.of("missions/usecase.txt"), options.mission());
+    assertEquals(Path.of("shot.png"), options.screenshot());
+    assertEquals(3.5, options.screenshotAt());
+    assertEquals("gui", Main.Options.parse(new String[] {"gui"}).mode());
     assertNull(Main.Options.parse(new String[] {"--scenario=empty"}).mission());
   }
 

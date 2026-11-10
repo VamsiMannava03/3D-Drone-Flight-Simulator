@@ -8,6 +8,8 @@ import dronesimulation.model.events.EventBus;
 import dronesimulation.model.events.SimEvent;
 import dronesimulation.view.SimulationView;
 import dronesimulation.view.TextView;
+import dronesimulation.view.fx.HoverApp;
+import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -53,6 +55,11 @@ public final class Main {
         + " drones. Type 'help' for commands, 'quit' to exit."
         + (options.paused() ? " Paused: type 'start' to begin." : ""));
 
+    if (options.mode().equals("gui")) {
+      HoverApp.open(new HoverApp.Setup(engine, FRAME_RATE, v -> connect(v, engine, events),
+          options.screenshot(), options.screenshotAt()));
+      System.exit(0);
+    }
     TextView view = new TextView();
     connect(view, engine, events);
     engine.runRealtime(FRAME_RATE);
@@ -125,27 +132,33 @@ public final class Main {
   /**
    * Command-line options.
    *
-   * @param mode how to show the simulation; only {@code text} so far
+   * @param mode how to show the simulation: {@code gui} or {@code text}
    * @param mission a mission file to run at start and after every reset, or null
    * @param seed the seed for gusts and sensor noise
    * @param paused whether to start paused
    * @param scenario {@code city} or {@code empty}
+   * @param screenshot where to save pictures of the window before closing it, or null
+   * @param screenshotAt how many simulated seconds to wait before the pictures
    */
-  record Options(String mode, Path mission, long seed, boolean paused, String scenario) {
+  record Options(String mode, Path mission, long seed, boolean paused, String scenario,
+      Path screenshot, double screenshotAt) {
 
-    /** The display modes this build supports. */
-    static final List<String> MODES = List.of("text");
+    /** The display modes this build supports; the first is the default. */
+    static final List<String> MODES = List.of("gui", "text");
 
     /**
      * Parses the command line.
      *
      * @param args the arguments: a mode, {@code --mission=FILE}, {@code --seed=N},
-     *     {@code --scenario=city|empty} and {@code --paused}
+     *     {@code --scenario=city|empty}, {@code --paused}, {@code --screenshot=FILE} and
+     *     {@code --screenshot-at=SECONDS}; without a display the mode is {@code text}
      * @return the options
      * @throws IllegalArgumentException for an unknown mode or scenario, or a bad seed
      */
     static Options parse(String[] args) {
-      String mode = MODES.get(0);
+      String mode = GraphicsEnvironment.isHeadless() ? "text" : MODES.get(0);
+      Path screenshot = null;
+      double screenshotAt = 8;
       Path mission = null;
       long seed = 42;
       boolean paused = false;
@@ -157,6 +170,10 @@ public final class Main {
           paused = true;
         } else if (arg.startsWith("--mission=")) {
           mission = Path.of(arg.substring("--mission=".length()));
+        } else if (arg.startsWith("--screenshot=")) {
+          screenshot = Path.of(arg.substring("--screenshot=".length()));
+        } else if (arg.startsWith("--screenshot-at=")) {
+          screenshotAt = Double.parseDouble(arg.substring("--screenshot-at=".length()));
         } else if (arg.startsWith("--seed=")) {
           seed = Long.parseLong(arg.substring("--seed=".length()));
         } else {
@@ -174,7 +191,7 @@ public final class Main {
       if (mission == null && scenario.equals("city")) {
         mission = Path.of("missions", "demo.txt"); // the empty world starts with nothing
       }
-      return new Options(mode, mission, seed, paused, scenario);
+      return new Options(mode, mission, seed, paused, scenario, screenshot, screenshotAt);
     }
   }
 }
