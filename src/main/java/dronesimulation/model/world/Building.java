@@ -166,4 +166,27 @@ public final class Building extends Obstacle {
   public double distanceTo(Vector3D point) {
     return box.distanceTo(point);
   }
+
+  /**
+   * Two buildings are equal when they have the same name, corners and style, so snapshots of
+   * the same scenario compare equal.
+   *
+   * @param other the object to compare with
+   * @return true if it is an equal building
+   */
+  @Override
+  public boolean equals(Object other) {
+    return other instanceof Building b && name().equals(b.name()) && min().equals(b.min())
+        && max().equals(b.max()) && style == b.style;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name(), min(), max(), style);
+  }
+
+  @Override
+  public String toString() {
+    return "Building[" + name() + ", " + style + ", " + min() + " to " + max() + "]";
+  }
 }

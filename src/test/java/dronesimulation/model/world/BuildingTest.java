@@ -1,6 +1,7 @@
 package dronesimulation.model.world;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -51,6 +52,18 @@ class BuildingTest {
         () -> new Building("X", Vector3D.ZERO, new Vector3D(1, 1, 1), null));
     assertEquals(Building.Style.BLOCK,
         new Building("Bridge", Vector3D.ZERO, new Vector3D(1, 1, 1)).style());
+  }
+
+  @Test
+  void buildingsWithTheSameValuesAreEqual() {
+    Building a = Building.house("H", 0, 0, 8, 8, 6);
+    assertEquals(a, Building.house("H", 0, 0, 8, 8, 6));
+    assertEquals(a.hashCode(), Building.house("H", 0, 0, 8, 8, 6).hashCode());
+    assertNotEquals(a, Building.block("H", 0, 0, 8, 8, 6));
+    assertNotEquals(a, Building.house("G", 0, 0, 8, 8, 6));
+    assertNotEquals(a, Building.house("H", 1, 0, 8, 8, 6));
+    assertNotEquals(a, "H");
+    assertTrue(a.toString().contains("HOUSE"));
   }
 
   @Test
