@@ -51,7 +51,8 @@ public class TextView implements SimulationView {
     for (DroneSnapshot d : snapshot.drones()) {
       out.printf(Locale.ROOT, "%-5s %-10s %-9s pos=(%.2f, %.2f, %.2f)  speed=%5.2f m/s  throttle=%3.0f%%  "
               + "battery=%3.0f%%  mass=%.2f kg  %s%n",
-          d.id(), d.type(), d.state(), d.position().x(), d.position().y(), d.position().z(),
+          d.id(), d.type(), d.state(), noNegativeZero(d.position().x()),
+          noNegativeZero(d.position().y()), noNegativeZero(d.position().z()),
           d.velocity().magnitude(), d.throttle() * 100,
           d.batteryLevel() * 100, d.mass(), d.command().isEmpty() ? "" : "[" + d.command() + "]");
     }
@@ -60,5 +61,10 @@ public class TextView implements SimulationView {
   @Override
   public synchronized void showMessage(String message) {
     out.println(message);
+  }
+
+  /** Rounds like the printout, so tiny negative values print as 0.00 rather than -0.00. */
+  private static double noNegativeZero(double value) {
+    return Math.abs(value) < 0.005 ? 0 : value;
   }
 }
