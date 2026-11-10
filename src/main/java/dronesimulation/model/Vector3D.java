@@ -111,4 +111,14 @@ public record Vector3D(double x, double y, double z) {
     }
     return scale(1 / length);
   }
+
+  /**
+   * Returns the straight-line distance between this point and another.
+   *
+   * @param other the other point
+   * @return the distance, not negative
+   */
+  public double distanceTo(Vector3D other) {
+    return subtract(other).magnitude();
+  }
 }

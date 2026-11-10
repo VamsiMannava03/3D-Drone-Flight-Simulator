@@ -133,4 +133,10 @@ public class Vector3DTest {
     assertVector(0, 0, -9.81, velocity);
     assertVector(0, 0, -4.95405, position);
   }
+
+  @Test
+  public void distanceToIsLengthOfDifference() {
+    assertEquals(5, new Vector3D(1, 2, 3).distanceTo(new Vector3D(4, 6, 3)), 1e-12);
+    assertEquals(0, Vector3D.UP.distanceTo(Vector3D.UP), 0);
+  }
 }
