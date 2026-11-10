@@ -5,7 +5,7 @@ import java.util.function.DoubleBinaryOperator;
 
 /**
  * Builds triangle meshes on the CPU from simple shapes. Each vertex is six floats: position
- * (x, y, z) then normal (nx, ny, nz). The result goes to {@link Mesh} for the GPU.
+ * (x, y, z) then normal (nx, ny, nz). The JavaFX view turns the result into triangle meshes.
  */
 public class MeshBuilder {
 
@@ -295,6 +295,35 @@ public class MeshBuilder {
     vertex(corners[0], normal);
     vertex(corners[2], normal);
     vertex(corners[3], normal);
+    return this;
+  }
+
+  /**
+   * Adds another mesh's vertices, moved by a transform. Normals are transformed by the
+   * inverse transpose, so they stay correct under non-uniform scaling.
+   *
+   * @param vertices interleaved position and normal floats, as {@link #toArray()} gives
+   * @param transform where to put them
+   * @return this builder
+   */
+  public MeshBuilder append(float[] vertices, float[] transform) {
+    float[] inverse = Mat4.invert(transform);
+    for (int i = 0; i + FLOATS_PER_VERTEX <= vertices.length; i += FLOATS_PER_VERTEX) {
+      double[] p = Mat4.transform(transform, vertices[i], vertices[i + 1], vertices[i + 2], 1);
+      double nx = vertices[i + 3];
+      double ny = vertices[i + 4];
+      double nz = vertices[i + 5];
+      // (M^-1)^T n: row j of the transpose is column j of the inverse.
+      double[] n = {
+          inverse[0] * nx + inverse[1] * ny + inverse[2] * nz,
+          inverse[4] * nx + inverse[5] * ny + inverse[6] * nz,
+          inverse[8] * nx + inverse[9] * ny + inverse[10] * nz};
+      double len = Math.sqrt(n[0] * n[0] + n[1] * n[1] + n[2] * n[2]);
+      if (len > 0) {
+        n = scaled(n, 1 / len);
+      }
+      vertex(p, n);
+    }
     return this;
   }
 
