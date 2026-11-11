@@ -1,0 +1,5 @@
+dronesimulation/model/Vector3DTest.class
+dronesimulation/model/obstacles/SphereObstacleTest.class
+dronesimulation/MainTest.class
+dronesimulation/model/obstacles/BoxObstacleTest.class
+dronesimulation/model/obstacles/ObstacleFieldTest.class

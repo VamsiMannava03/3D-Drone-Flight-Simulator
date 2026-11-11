@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SphereObstacle.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">3D-Drone-Simulation</a> &gt; <a href="index.source.html" class="el_package">dronesimulation.model.obstacles</a> &gt; <span class="el_source">SphereObstacle.java</span></div><h1>SphereObstacle.java</h1><pre class="source lang-java linenums">package dronesimulation.model.obstacles;
+
+import dronesimulation.model.Vector3D;
+
+/**
+ * A round obstacle, such as a balloon or a tree canopy
+ */
+public final class SphereObstacle extends Obstacle {
+
+  private final Vector3D center;
+  private final double radius;
+
+  /**
+   * Creates a sphere from its center and radius
+   *
+   * @param id the name of the obstacle
+   * @param center the center of the sphere
+   * @param radius the radius in meters
+   * @throws IllegalArgumentException if the center is null or the radius is not a positive number
+   */
+  public SphereObstacle(String id, Vector3D center, double radius) {
+<span class="fc" id="L22">    super(id);</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">    if (center == null) {</span>
+<span class="fc" id="L24">      throw new IllegalArgumentException(&quot;Center must not be null&quot;);</span>
+    }
+<span class="fc bfc" id="L26" title="All 4 branches covered.">    if (!Double.isFinite(radius) || radius &lt;= 0) {</span>
+<span class="fc" id="L27">      throw new IllegalArgumentException(&quot;Radius must be a finite number &gt; 0 but was &quot; + radius);</span>
+    }
+<span class="fc" id="L29">    this.center = center;</span>
+<span class="fc" id="L30">    this.radius = radius;</span>
+<span class="fc" id="L31">  }</span>
+
+  /**
+   * Returns the center of the sphere
+   *
+   * @return the center point
+   */
+  public Vector3D getCenter() {
+<span class="fc" id="L39">    return center;</span>
+  }
+
+  /**
+   * Returns the radius of the sphere
+   *
+   * @return the radius in meters
+   */
+  public double getRadius() {
+<span class="fc" id="L48">    return radius;</span>
+  }
+
+  @Override
+  public double distanceTo(Vector3D point) {
+<span class="fc" id="L53">    double distance = point.subtract(center).magnitude() - radius;</span>
+    // Points inside the sphere count as 0
+<span class="fc" id="L55">    return Math.max(0, distance);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

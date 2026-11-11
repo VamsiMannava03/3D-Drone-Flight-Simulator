@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Vector3D.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">3D-Drone-Simulation</a> &gt; <a href="index.source.html" class="el_package">dronesimulation.model</a> &gt; <span class="el_source">Vector3D.java</span></div><h1>Vector3D.java</h1><pre class="source lang-java linenums">package dronesimulation.model;
+
+/**
+ * An immutable vector in three-dimensional space.
+ *
+ * &lt;p&gt;Used for positions, velocities, accelerations, forces and wind. Every operation returns a
+ * new vector and leaves the original unchanged. The class makes no assumption about which axis
+ * points up. Components must be finite, so a {@code NaN} or infinite value fails where it is
+ * created instead of spreading through the physics.
+ *
+ * @param x the x component
+ * @param y the y component
+ * @param z the z component
+ */
+public record Vector3D(double x, double y, double z) {
+
+  /** The zero vector, {@code (0, 0, 0)}. */
+<span class="fc" id="L18">  public static final Vector3D ZERO = new Vector3D(0, 0, 0);</span>
+
+  /**
+   * Creates a vector from its components.
+   *
+   * @throws IllegalArgumentException if any component is {@code NaN} or infinite
+   */
+<span class="fc" id="L25">  public Vector3D {</span>
+<span class="fc bfc" id="L26" title="All 6 branches covered.">    if (!Double.isFinite(x) || !Double.isFinite(y) || !Double.isFinite(z)) {</span>
+<span class="fc" id="L27">      throw new IllegalArgumentException(</span>
+          &quot;Components must be finite numbers but were (&quot; + x + &quot;, &quot; + y + &quot;, &quot; + z + &quot;)&quot;);
+    }
+<span class="fc" id="L30">  }</span>
+
+  /**
+   * Returns the sum of this vector and another.
+   *
+   * @param other the vector to add
+   * @return a new vector {@code this + other}
+   */
+  public Vector3D add(Vector3D other) {
+<span class="fc" id="L39">    return new Vector3D(x + other.x, y + other.y, z + other.z);</span>
+  }
+
+  /**
+   * Returns the difference between this vector and another.
+   *
+   * @param other the vector to subtract
+   * @return a new vector {@code this - other}
+   */
+  public Vector3D subtract(Vector3D other) {
+<span class="fc" id="L49">    return new Vector3D(x - other.x, y - other.y, z - other.z);</span>
+  }
+
+  /**
+   * Returns this vector multiplied by a scalar.
+   *
+   * @param factor the scalar to multiply by
+   * @return a new vector {@code this * factor}
+   */
+  public Vector3D scale(double factor) {
+<span class="fc" id="L59">    return new Vector3D(x * factor, y * factor, z * factor);</span>
+  }
+
+  /**
+   * Returns the dot product of this vector and another.
+   *
+   * @param other the other vector
+   * @return {@code this . other}
+   */
+  public double dot(Vector3D other) {
+<span class="fc" id="L69">    return x * other.x + y * other.y + z * other.z;</span>
+  }
+
+  /**
+   * Returns the cross product of this vector and another, using the right-hand rule.
+   *
+   * @param other the other vector
+   * @return a new vector {@code this x other}, perpendicular to both
+   */
+  public Vector3D cross(Vector3D other) {
+<span class="fc" id="L79">    return new Vector3D(</span>
+        y * other.z - z * other.y,
+        z * other.x - x * other.z,
+        x * other.y - y * other.x);
+  }
+
+  /**
+   * Returns the length of this vector.
+   *
+   * @return the Euclidean length, never negative
+   */
+  public double magnitude() {
+<span class="fc" id="L91">    return Math.sqrt(dot(this));</span>
+  }
+
+  /**
+   * Returns the unit vector pointing in the same direction as this one.
+   *
+   * @return a new vector of length 1
+   * @throws IllegalStateException if this is the zero vector, which has no direction
+   */
+  public Vector3D normalize() {
+<span class="fc" id="L101">    double length = magnitude();</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">    if (length == 0) {</span>
+<span class="fc" id="L103">      throw new IllegalStateException(&quot;Cannot normalize the zero vector&quot;);</span>
+    }
+<span class="fc" id="L105">    return scale(1 / length);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

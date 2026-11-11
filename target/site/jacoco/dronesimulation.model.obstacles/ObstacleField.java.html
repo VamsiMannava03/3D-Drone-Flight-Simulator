@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ObstacleField.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">3D-Drone-Simulation</a> &gt; <a href="index.source.html" class="el_package">dronesimulation.model.obstacles</a> &gt; <span class="el_source">ObstacleField.java</span></div><h1>ObstacleField.java</h1><pre class="source lang-java linenums">package dronesimulation.model.obstacles;
+
+import dronesimulation.model.Vector3D;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * Holds all obstacles in the world and checks drones against them
+ */
+<span class="fc" id="L11">public class ObstacleField {</span>
+
+<span class="fc" id="L13">  private final List&lt;Obstacle&gt; obstacles = new ArrayList&lt;&gt;();</span>
+
+  /**
+   * Adds an obstacle to the world
+   *
+   * @param obstacle the obstacle to add
+   * @throws IllegalArgumentException if the obstacle is null or its id is already used
+   */
+  public void add(Obstacle obstacle) {
+<span class="fc bfc" id="L22" title="All 2 branches covered.">    if (obstacle == null) {</span>
+<span class="fc" id="L23">      throw new IllegalArgumentException(&quot;Obstacle must not be null&quot;);</span>
+    }
+<span class="fc bfc" id="L25" title="All 2 branches covered.">    if (find(obstacle.getId()) != null) {</span>
+<span class="fc" id="L26">      throw new IllegalArgumentException(&quot;Obstacle id already used: &quot; + obstacle.getId());</span>
+    }
+<span class="fc" id="L28">    obstacles.add(obstacle);</span>
+<span class="fc" id="L29">  }</span>
+
+  /**
+   * Removes the obstacle with the given id
+   *
+   * @param id the id of the obstacle to remove
+   * @return true if an obstacle was removed
+   */
+  public boolean remove(String id) {
+<span class="fc" id="L38">    Obstacle obstacle = find(id);</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">    if (obstacle == null) {</span>
+<span class="fc" id="L40">      return false;</span>
+    }
+<span class="fc" id="L42">    return obstacles.remove(obstacle);</span>
+  }
+
+  /**
+   * Returns the obstacle with the given id
+   *
+   * @param id the id to look for
+   * @return the matching obstacle, or null if there is none
+   */
+  public Obstacle find(String id) {
+<span class="fc bfc" id="L52" title="All 2 branches covered.">    for (Obstacle obstacle : obstacles) {</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">      if (obstacle.getId().equals(id)) {</span>
+<span class="fc" id="L54">        return obstacle;</span>
+      }
+<span class="fc" id="L56">    }</span>
+<span class="fc" id="L57">    return null;</span>
+  }
+
+  /**
+   * Returns the first obstacle a drone, treated as a sphere, is touching
+   *
+   * @param center the center of the drone
+   * @param radius the radius of the drone in meters
+   * @return the obstacle hit, or null if the drone is clear
+   * @throws IllegalArgumentException if the center is null or the radius is negative or not finite
+   */
+  public Obstacle findCollision(Vector3D center, double radius) {
+<span class="fc bfc" id="L69" title="All 2 branches covered.">    for (Obstacle obstacle : obstacles) {</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">      if (obstacle.collidesWith(center, radius)) {</span>
+<span class="fc" id="L71">        return obstacle;</span>
+      }
+<span class="fc" id="L73">    }</span>
+<span class="fc" id="L74">    return null;</span>
+  }
+
+  /**
+   * Checks if a drone, treated as a sphere, is touching any obstacle
+   *
+   * @param center the center of the drone
+   * @param radius the radius of the drone in meters
+   * @return true if the drone hits at least one obstacle
+   * @throws IllegalArgumentException if the center is null or the radius is negative or not finite
+   */
+  public boolean hasCollision(Vector3D center, double radius) {
+<span class="fc bfc" id="L86" title="All 2 branches covered.">    return findCollision(center, radius) != null;</span>
+  }
+
+  /**
+   * Returns a read only view of all obstacles, in the order they were added
+   *
+   * @return the obstacles
+   */
+  public List&lt;Obstacle&gt; getObstacles() {
+<span class="fc" id="L95">    return Collections.unmodifiableList(obstacles);</span>
+  }
+
+  /**
+   * Returns the number of obstacles
+   *
+   * @return the obstacle count
+   */
+  public int size() {
+<span class="fc" id="L104">    return obstacles.size();</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
